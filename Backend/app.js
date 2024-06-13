@@ -5,13 +5,14 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/auth.user.route.js"
 import adminRoutes from "./routes/auth.admin.route.js";
 import cookieParser from "cookie-parser";
-
+const cors = require("cors");
 // Load environment variables from .env file
 dotenv.config();
 
 // Create an Express application
 const app = express();
 app.use(express.json());
+app.use(cors()); // Enable CORS for all routes
 
 app.use(cookieParser());
 

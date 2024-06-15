@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { useAuth } from "../../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
 function AdminCreateCourse() {
-  const { adminToken } = useAuth(); // Access adminToken from AuthContext
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [moduleCode, setModuleCode] = useState("");
   const [price, setPrice] = useState(0.0);
+  const navigate = useNavigate();
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -22,51 +23,43 @@ function AdminCreateCourse() {
   };
 
   const handlePriceChange = (e) => {
-    setPrice(parseFloat(e.target.value)); // Convert to float for price
+    setPrice(parseFloat(e.target.value));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Prepare data to send to backend API
     const formData = {
-      title: title,
-      description: description,
-      moduleCode: moduleCode,
-      price: price,
+      title,
+      description,
+      moduleCode,
+      price,
     };
 
     console.log("Form submitted with data:", formData);
 
     try {
-      // Sending data to backend using Axios
       const response = await axios.post(
         "http://localhost:3000/api/admins/courses",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${adminToken}`, // Attach admin token in Authorization header
-          },
-        }
+        formData
       );
 
-      // Show success message using SweetAlert2
       Swal.fire({
         icon: "success",
-        title: "Course Created Successfully!",
+        title: "Course Created Successfully",
         showConfirmButton: false,
-        timer: 1500, // Automatically close after 1.5 seconds
+        timer: 1500,
       });
 
-      // Clear form fields after successful submission
       setTitle("");
       setDescription("");
       setModuleCode("");
       setPrice(0.0);
 
-      console.log("Course created successfully:", response.data);
+      console.log("Course Created Successfully:", response.data);
+
+      navigate("/admin-courses-list");
     } catch (error) {
-      // Show error message using SweetAlert2
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -78,9 +71,9 @@ function AdminCreateCourse() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-lg border border-gray-300">
-        <h2 className="text-2xl font-bold mb-4">Create Course</h2>
+    <div className="flex justify-center ">
+      <div className="w-full md:w-2/3 p-4">
+        <h2 className="text-2xl font-bold mb-4 text-center">Create Course</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -91,6 +84,7 @@ function AdminCreateCourse() {
               value={title}
               onChange={handleTitleChange}
               className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 
@@ -103,6 +97,7 @@ function AdminCreateCourse() {
               onChange={handleDescriptionChange}
               rows="3"
               className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 
@@ -115,6 +110,7 @@ function AdminCreateCourse() {
               value={moduleCode}
               onChange={handleModuleCodeChange}
               className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
             />
           </div>
 
@@ -127,14 +123,15 @@ function AdminCreateCourse() {
               step="0.01"
               value={price}
               onChange={handlePriceChange}
-              className="mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 w-full px-4 py-2 "
+              required
             />
           </div>
 
-          <div>
+          <div className="flex justify-end">
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow-md mr-2"
             >
               Create Course
             </button>

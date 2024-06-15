@@ -1,7 +1,11 @@
 import { useState } from "react";
-import axios from "axios"; 
+import axios from "axios";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom"; 
 
 function StudentRegister() {
+   const naviagte = useNavigate();
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -21,7 +25,7 @@ function StudentRegister() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://online-learning-platform-06gr.onrender.com/api/users/register",
+        "http://localhost:3000/api/users/register",
         formData
       );
       console.log("API Response:", response.data);
@@ -33,10 +37,28 @@ function StudentRegister() {
         email: "",
         password: "",
       });
+      // Show SweetAlert for success
+      Swal.fire({
+        icon: "success",
+        title: "Registration successful!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      // Redirect to dashboard after successful registration
+        naviagte("/student-dashboard");
     } catch (error) {
       console.error("Registration Error:", error);
       setError("Registration failed. Please try again."); // Set error message if registration fails
       setSuccessMessage(null); // Clear any previous success messages
+      // Show SweetAlert for failure
+      Swal.fire({
+        icon: "error",
+        title: "Registration failed",
+        text: "Please try again",
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "OK",
+      });
     }
   };
 

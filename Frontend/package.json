@@ -13,9 +13,12 @@
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
+    "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "postcss": "^8.4.38",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^5.2.1",
     "react-router-dom": "^6.23.1",
     "sweetalert": "^2.1.2",
     "sweetalert2": "^11.11.1"
